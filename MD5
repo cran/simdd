@@ -1,8 +1,10 @@
-117d7c1de8dc6f7ed7dfc1adb23ea00d *DESCRIPTION
+a951f152c58b9bdd0a308d01095400cd *DESCRIPTION
 ea3cb5daa7bf364a5e7402a72b4d51cb *NAMESPACE
-43e35ff12387af2f86e713c31da781b6 *NEWS.md
-532c1b02a3d8942b36492701f44c620d *R/simdd.r
-ea124a494ad7922985532ad3b308e4d5 *build/partial.rdb
+45ec99320f7c52c31d00c9490fb53f18 *NEWS.md
+bd2970697104e4df3ab305f4a515d9b0 *R/simdd.r
+7080893e02c49cd296d4424b9be55069 *build/partial.rdb
 9559caf5204998c166944c03f678c863 *inst/CITATION
-a2be91f572e915075baab384a651f8ff *man/rFisherBingham.Rd
-0ea82d6b1d8a8c5e1c8059fee5a132b9 *man/simdd-package.Rd
+3a5b46e3d2f07c16ed26a9fc74e58e49 *man/rFisherBingham.Rd
+f41127e361a11cb4f46f863eca4ef7bf *man/simdd-package.Rd
+a5e28b95e48d190dc4c8933d8e6c8df6 *tests/testthat.R
+0d38c5dd7864f5204ccae5b192078e23 *tests/testthat/test-rFisherBingham.R

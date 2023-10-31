@@ -51,6 +51,7 @@ rBingham=function(nsim,Aplus,q=dimq(Aplus),mtop=1000) {
   summ=c(ntry,(nsim-nleft)/ntry,(nleft==0),mloop=mloop,minfg,maxfg)#G
   names(summ)=c("ntry","efficiency","success","mloops","minfg","maxfg") #G
   attr(values,"summary")=summ
+  if ((mloop == mtop) && (nleft > 0)){warning("Iterations reached mtop. Exiting before completing requested nsim simulations.")}
   values
 }
 
@@ -95,6 +96,7 @@ rFisherBingham=function(nsim,mu=0,Aplus=0, q=dimset(mu,Aplus), mtop=1000) {
   summ=c(ntry,(nsim-nleft)/ntry,(nleft==0),mloop=mloop,minfg,maxfg)
   names(summ)=c("ntry","efficiency","success","mloops","minfg","maxfg") 
   attr(values,"summary")=summ
+  if ((mloop == mtop) && (nleft > 0)){warning("Iterations reached mtop. Exiting before completing requested nsim simulations.")}
   values
 }
 
@@ -218,7 +220,7 @@ b2mf=function(A) {
   # Fmat is the 3 by 3 parameter matrix.
   # output is a 3 by 3 by nsim array of rotation matrices.
 
-rFisher.SO3=function(nsim,Fmat) s3toso3(rBingham(nsim,mf2b(Fmat)))
+rFisher.SO3=function(nsim,Fmat, mtop = 1000) s3toso3(rBingham(nsim,mf2b(Fmat), mtop = mtop))
 
 rBingham.Grassmann=function(nsim,Aplus=0, q=dimq(Aplus),r=1,mtop=1000) {
   ndone=0; nleft=nsim; mloop=0; ntry=0
@@ -272,8 +274,9 @@ rBingham.Grassmann=function(nsim,Aplus=0, q=dimq(Aplus),r=1,mtop=1000) {
    }
   }
   summ=c(ntry,(nsim-nleft)/ntry,(nleft==0),mloop=mloop,minfg,maxfg)#G
-  names(summ)=c("ntry","eff","success","mloops","minfg","maxfg") #G
+  names(summ)=c("ntry","efficiency","success","mloops","minfg","maxfg") #G
   attr(values,"summary")=summ
+  if ((mloop == mtop) && (nleft > 0)){warning("Iterations reached mtop. Exiting before completing requested nsim simulations.")}
   values
 }
 
@@ -303,15 +306,16 @@ rBessel=function(nsim,k1,k2,alpha,mtop=1000) {
   summ=c(ntry,(nsim-nleft)/ntry,(nleft==0),mloop=mloop,minfg,maxfg)#G
   names(summ)=c("ntry","eff","success","mloops","minfg","maxfg") #G
   attr(values,"summary")=summ 
+  if ((mloop == mtop) && (nleft > 0)){warning("Iterations reached mtop. Exiting before completing requested nsim simulations.")}
   values
 }
 
 rvMsin.torus=function(nsim,k1,k2,alpha,mtop=1000) {
-  X=rBessel(nsim,k1,k2,alpha)
+  X=rBessel(nsim,k1,k2,alpha,mtop = mtop)
   summ=attr(X,"summary")
   kappa=sqrt(k2^2+alpha*X[,2]) # conditional concentrations
-  Y=matrix(0,nsim,2)
-  for(i in 1:nsim) Y[i,]=rFisherBingham(1,c(k2,alpha*X[i,2]))
+  Y=matrix(0,nrow(X),2)
+  for(i in 1:nrow(X)) Y[i,]=rFisherBingham(1,c(k2,alpha*X[i,2]))
   values=cbind(X,Y); attr(values,"summary")=summ
   values
   

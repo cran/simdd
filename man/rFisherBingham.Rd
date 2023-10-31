@@ -18,7 +18,7 @@
 rFisherBingham(nsim, mu = 0, Aplus = 0, q = dimset(mu, Aplus), mtop = 1000)
 rBingham(nsim, Aplus, q = dimq(Aplus), mtop = 1000)
 rBingham.Grassmann(nsim, Aplus = 0, q = dimq(Aplus), r = 1, mtop = 1000)
-rFisher.SO3(nsim, Fmat)
+rFisher.SO3(nsim, Fmat, mtop = 1000)
 rvMsin.torus(nsim, k1, k2, alpha, mtop=1000)
 rBessel(nsim, k1, k2, alpha, mtop=1000)
 }
@@ -42,7 +42,7 @@ rBessel(nsim, k1, k2, alpha, mtop=1000)
 
 \item{r}{For \code{rBingham.Grassmann}, \code{r} denotes the number of columns (\code{1 <= r <= q-1}) in the matrix Bingham distribution}
 
-\item{mtop}{An internal parameter, designed to prevent infinite loops.}
+\item{mtop}{The maximum number of attempts to generate \code{nsim} simulations. A finite \code{mtop} prevents infinite loops in extreme situations. If \code{mtop} is reached there will be a warning.}
 
 \item{Fmat}{The 3 by 3 parameter matrix for the matrix Fisher
       distribution in the function \code{rFisher.SO3}.}
@@ -85,7 +85,10 @@ rBessel(nsim, k1, k2, alpha, mtop=1000)
   \deqn{\exp(\code{k1} \cos(\theta) + \code{k2} cos(\phi) + \code{alpha} sin(\theta) \sin(\phi))}
 
   for two angles \eqn{\theta}, \eqn{\phi}.  The Bessel density is obtained from the
-  bivariate von Mises sine model as the marginal density of \eqn{\theta}.}
+  bivariate von Mises sine model as the marginal density of \eqn{\theta}.
+
+  If \code{mtop} is reached before obtaining \code{nsim} simulations then a warning is created and the returned array will have fewer than \code{nsim} rows.
+}
 
 \value{For \code{rBingham} and \code{rFisherBingham}, the output is an \code{nsim} by \code{q}
   matrix.  Each row is a simulated unit vector.
@@ -110,7 +113,15 @@ rBessel(nsim, k1, k2, alpha, mtop=1000)
   needed in the acceptance/rejection algorithm.  The key element of this
   vector is called \code{efficiency}, a number between 0 and 1, where 1 means
   that all the simulated values from the envelope distribution have been
-  accepted.  }
+  accepted.
+\itemize{
+  \item \code{ntry} is the number of simulations drawn from the envelope distribution.
+  \item \code{efficiency} is the proportion of simulations drawn from the envelope distribution that were accepted.
+  \item \code{success} is \code{1} when simulations were completed, and \code{0} otherwise. Usually the simulations are incomplete because the number of iterations (in entry \code{mloops}) has reached the maximum \code{mtop}.
+  \item \code{mloops} is the number of iterations used.
+  \item \code{minfg} is the smallest observed value of the envelope.
+  \item \code{maxfg} is the largest observed value of the envelope.}
+}
 
 \references{
 John T. Kent, Asaad M. Ganeiber & Kanti V. Mardia (2018) A New Unified Approach for the Simulation of a Wide Class of Directional Distributions, Journal of Computational and Graphical Statistics, 27:2, 291-301, DOI: \doi{10.1080/10618600.2017.1390468} 
